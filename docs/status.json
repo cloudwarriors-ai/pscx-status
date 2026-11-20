@@ -1,0 +1,19 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-11-20T15:44:54Z",
+  "sites": [
+    {
+      "name": "PSCX website",
+      "url": "https://pscx.ai",
+      "up": null,
+      "status": null,
+      "ms": null,
+      "last_check": null,
+      "uptime": {
+        "24h": null,
+        "7d": null,
+        "90d": null
+      }
+    }
+  ]
+}

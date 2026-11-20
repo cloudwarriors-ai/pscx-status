@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="refresh" content="300">
+<title>PSCX Status</title>
+<style>
+:root {
+  color-scheme: light dark;
+  --bg: #ffffff; --fg: #1f2328; --muted: #59636e; --card: #f6f8fa; --line: #d1d9e0;
+  --ok: #1a7f37; --partial: #9a6700; --down: #cf222e; --none: #d1d9e0;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #0d1117; --fg: #e6edf3; --muted: #9198a1; --card: #161b22; --line: #3d444d;
+    --ok: #3fb950; --partial: #d29922; --down: #f85149; --none: #3d444d;
+  }
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); color: var(--fg);
+  font: 16px/1.5 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
+main { max-width: 760px; margin: 0 auto; padding: 24px 16px; }
+h1 { font-size: 1.6rem; margin: 0 0 16px; }
+.banner { padding: 12px 16px; border-radius: 8px; color: #fff; font-weight: 600; margin-bottom: 24px; }
+.banner.ok { background: var(--ok); } .banner.down { background: var(--down); }
+.banner.none { background: var(--muted); }
+@media (prefers-color-scheme: dark) { .banner { color: #0d1117; } }
+.site { background: var(--card); border: 1px solid var(--line); border-radius: 8px;
+  padding: 16px; margin-bottom: 16px; }
+.site h2 { font-size: 1.15rem; margin: 0 0 12px; display: flex; flex-wrap: wrap;
+  justify-content: space-between; gap: 8px; }
+.site h2 a { color: inherit; }
+.state { font-size: 0.95rem; }
+.state.ok { color: var(--ok); } .state.down { color: var(--down); } .state.none { color: var(--muted); }
+.uptime { display: flex; flex-wrap: wrap; gap: 8px 24px; margin: 0 0 12px; }
+.uptime dt { color: var(--muted); font-size: 0.85rem; }
+.uptime dd { margin: 0; font-weight: 600; }
+.bar { display: flex; gap: 2px; height: 32px; }
+.day { flex: 1 1 0; min-width: 1px; border-radius: 2px; background: var(--none); }
+.day.ok { background: var(--ok); } .day.partial { background: var(--partial); }
+.day.down { background: var(--down); }
+.axis { display: flex; justify-content: space-between; color: var(--muted); font-size: 0.8rem; margin-top: 4px; }
+.last { color: var(--muted); font-size: 0.9rem; margin: 8px 0 0; }
+footer { color: var(--muted); font-size: 0.9rem; border-top: 1px solid var(--line);
+  margin-top: 24px; padding-top: 16px; }
+footer a { color: inherit; }
+</style>
+</head>
+<body>
+<main>
+<h1>PSCX Status</h1>
+<p class="banner none" role="status">Waiting for the first check</p>
+<section class="site">
+<h2><a href="https://pscx.ai">PSCX website</a> <span class="state none">No data yet</span></h2>
+<dl class="uptime"><div><dt>24 hours</dt><dd>No data</dd></div><div><dt>7 days</dt><dd>No data</dd></div><div><dt>90 days</dt><dd>No data</dd></div></dl>
+<div class="bar" role="img" aria-label="Daily uptime for the last 90 days: 0 day(s) below 100%"><span class="day none" title="2026-08-23: No data"></span><span class="day none" title="2026-08-24: No data"></span><span class="day none" title="2026-08-25: No data"></span><span class="day none" title="2026-08-26: No data"></span><span class="day none" title="2026-08-27: No data"></span><span class="day none" title="2026-08-28: No data"></span><span class="day none" title="2026-08-29: No data"></span><span class="day none" title="2026-08-30: No data"></span><span class="day none" title="2026-08-31: No data"></span><span class="day none" title="2026-09-01: No data"></span><span class="day none" title="2026-09-02: No data"></span><span class="day none" title="2026-09-03: No data"></span><span class="day none" title="2026-09-04: No data"></span><span class="day none" title="2026-09-05: No data"></span><span class="day none" title="2026-09-06: No data"></span><span class="day none" title="2026-09-07: No data"></span><span class="day none" title="2026-09-08: No data"></span><span class="day none" title="2026-09-09: No data"></span><span class="day none" title="2026-09-10: No data"></span><span class="day none" title="2026-09-11: No data"></span><span class="day none" title="2026-09-12: No data"></span><span class="day none" title="2026-09-13: No data"></span><span class="day none" title="2026-09-14: No data"></span><span class="day none" title="2026-09-15: No data"></span><span class="day none" title="2026-09-16: No data"></span><span class="day none" title="2026-09-17: No data"></span><span class="day none" title="2026-09-18: No data"></span><span class="day none" title="2026-09-19: No data"></span><span class="day none" title="2026-09-20: No data"></span><span class="day none" title="2026-09-21: No data"></span><span class="day none" title="2026-09-22: No data"></span><span class="day none" title="2026-09-23: No data"></span><span class="day none" title="2026-09-24: No data"></span><span class="day none" title="2026-09-25: No data"></span><span class="day none" title="2026-09-26: No data"></span><span class="day none" title="2026-09-27: No data"></span><span class="day none" title="2026-09-28: No data"></span><span class="day none" title="2026-09-29: No data"></span><span class="day none" title="2026-09-30: No data"></span><span class="day none" title="2026-10-01: No data"></span><span class="day none" title="2026-10-02: No data"></span><span class="day none" title="2026-10-03: No data"></span><span class="day none" title="2026-10-04: No data"></span><span class="day none" title="2026-10-05: No data"></span><span class="day none" title="2026-10-06: No data"></span><span class="day none" title="2026-10-07: No data"></span><span class="day none" title="2026-10-08: No data"></span><span class="day none" title="2026-10-09: No data"></span><span class="day none" title="2026-10-10: No data"></span><span class="day none" title="2026-10-11: No data"></span><span class="day none" title="2026-10-12: No data"></span><span class="day none" title="2026-10-13: No data"></span><span class="day none" title="2026-10-14: No data"></span><span class="day none" title="2026-10-15: No data"></span><span class="day none" title="2026-10-16: No data"></span><span class="day none" title="2026-10-17: No data"></span><span class="day none" title="2026-10-18: No data"></span><span class="day none" title="2026-10-19: No data"></span><span class="day none" title="2026-10-20: No data"></span><span class="day none" title="2026-10-21: No data"></span><span class="day none" title="2026-10-22: No data"></span><span class="day none" title="2026-10-23: No data"></span><span class="day none" title="2026-10-24: No data"></span><span class="day none" title="2026-10-25: No data"></span><span class="day none" title="2026-10-26: No data"></span><span class="day none" title="2026-10-27: No data"></span><span class="day none" title="2026-10-28: No data"></span><span class="day none" title="2026-10-29: No data"></span><span class="day none" title="2026-10-30: No data"></span><span class="day none" title="2026-10-31: No data"></span><span class="day none" title="2026-11-01: No data"></span><span class="day none" title="2026-11-02: No data"></span><span class="day none" title="2026-11-03: No data"></span><span class="day none" title="2026-11-04: No data"></span><span class="day none" title="2026-11-05: No data"></span><span class="day none" title="2026-11-06: No data"></span><span class="day none" title="2026-11-07: No data"></span><span class="day none" title="2026-11-08: No data"></span><span class="day none" title="2026-11-09: No data"></span><span class="day none" title="2026-11-10: No data"></span><span class="day none" title="2026-11-11: No data"></span><span class="day none" title="2026-11-12: No data"></span><span class="day none" title="2026-11-13: No data"></span><span class="day none" title="2026-11-14: No data"></span><span class="day none" title="2026-11-15: No data"></span><span class="day none" title="2026-11-16: No data"></span><span class="day none" title="2026-11-17: No data"></span><span class="day none" title="2026-11-18: No data"></span><span class="day none" title="2026-11-19: No data"></span><span class="day none" title="2026-11-20: No data"></span></div>
+<div class="axis" aria-hidden="true"><span>90 days ago</span><span>Today</span></div>
+<p class="last">Last check: <time datetime="">Never</time></p>
+</section>
+<footer><p>Checks run every 10 minutes from GitHub&#x27;s servers. Report a security issue: <a href="mailto:security@pscx.ai">security@pscx.ai</a></p>
+<p>Page generated <time datetime="2026-11-20T15:44:54Z">2026-11-20 15:44:54 UTC</time>.</p></footer>
+</main>
+</body>
+</html>
