@@ -28,13 +28,20 @@ jobs:
 
       - name: Load history from the status-data branch
         run: |
-          if timeout 60 git fetch -q origin status-data; then
+          # Exit code 2 means the branch does not exist yet (first run); any other failure stops the
+          # run rather than starting history over. Only the newest commit is fetched: the history
+          # file is complete in it, and the push only needs the server to have that parent.
+          set +e; timeout 60 git ls-remote -q --exit-code --heads origin status-data >/dev/null; found=$?; set -e
+          if [ "$found" -eq 0 ]; then
+            timeout 60 git fetch -q --depth=1 origin status-data
             git worktree add -q data FETCH_HEAD
             git -C data switch -q -C status-data
             if [ -d data/history ]; then rm -rf history && cp -r data/history history; fi
-          else
+          elif [ "$found" -eq 2 ]; then
             git worktree add -q --detach data
             git -C data switch -q --orphan status-data
+          else
+            echo "::error::could not reach the status-data branch (exit $found)"; exit 1
           fi
 
       - name: Check sites and rebuild the page
