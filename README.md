@@ -16,9 +16,11 @@ third-party service.
 3. The result is appended to `history/<slug>.csv` with the columns
    `utc_time,up,status,ms`. Rows older than 90 days are removed.
 4. The script regenerates `docs/index.html` (the page) and `docs/status.json`
-   (the same data as JSON). The workflow commits the changes with the message
-   `status: <time> [skip ci]`.
-5. A second job publishes `docs/` to GitHub Pages.
+   (the same data as JSON). The workflow commits `history/` to the
+   `status-data` branch (not `main`: `main` changes only through pull
+   requests, and a commit every 10 minutes does not belong in the code history).
+   Each run starts from that branch's history.
+5. A second job publishes the rebuilt `docs/` to GitHub Pages.
 
 The page shows, for each site: the current state, uptime for the last 24 hours,
 7 days and 90 days (share of checks that were up), a bar of daily uptime for
