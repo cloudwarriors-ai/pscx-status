@@ -3,7 +3,9 @@
 import os
 import sys
 import tempfile
+import subprocess
 import unittest
+from unittest import mock
 from datetime import datetime, timedelta, timezone
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
@@ -48,6 +50,32 @@ class UptimeTests(unittest.TestCase):
         self.assertEqual(build.format_percent(99.31), "99.31%")
 
 
+class CheckSiteTests(unittest.TestCase):
+    def run_curl(self, returncode, stdout):
+        result = subprocess.CompletedProcess([], returncode, stdout=stdout, stderr="")
+        with mock.patch.object(build.subprocess, "run", return_value=result):
+            return build.check_site("https://example.com")
+
+    def test_success(self):
+        self.assertEqual(self.run_curl(0, "200 0.250"), (200, 250))
+
+    def test_curl_error_is_down_even_with_status(self):
+        self.assertEqual(self.run_curl(47, "301 0.100")[0], 0)  # too many redirects
+        self.assertEqual(self.run_curl(28, "200 20.000")[0], 0)  # timed out mid-body
+
+
+class BannerTests(unittest.TestCase):
+    def page(self, histories):
+        sites = [build.summarize({"name": "s%d" % i, "url": "https://e.com"}, rows, NOW)
+                 for i, rows in enumerate(histories)]
+        return build.render_page(sites, NOW)
+
+    def test_banner_states(self):
+        self.assertIn("All systems operational", self.page([[row(0)], [row(0)]]))
+        self.assertIn("Some systems are down", self.page([[row(0)], [row(0, up=False)]]))
+        self.assertIn("no data yet", self.page([[row(0)], []]))
+
+
 class TrimTests(unittest.TestCase):
     def test_keeps_only_last_90_days(self):
         rows = [row(60 * 24 * 91), row(60 * 24 * 90), row(60 * 24 * 89), row(0)]
@@ -84,6 +112,7 @@ class EscapingTests(unittest.TestCase):
         self.assertIn("security@pscx.ai", page)
         self.assertIn("All systems operational", page)
         self.assertNotIn("<script", page)
+        self.assertNotIn("http-equiv=\"refresh\"", page)
 
     def test_slugify(self):
         self.assertEqual(build.slugify("PSCX website"), "pscx-website")

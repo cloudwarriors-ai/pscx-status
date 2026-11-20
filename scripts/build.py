@@ -67,7 +67,7 @@ def is_up(status_code):
 
 
 def check_site(url):
-    """Return (status_code, milliseconds). Status 0 means no HTTP response."""
+    """Return (status_code, milliseconds). Status 0 means no complete response."""
     command = [
         "curl", "--silent", "--output", "/dev/null", "--location",
         "--max-redirs", "5", "--max-time", str(CURL_TIMEOUT_SECONDS),
@@ -78,7 +78,10 @@ def check_site(url):
         result = subprocess.run(command, capture_output=True, text=True,
                                 timeout=CURL_TIMEOUT_SECONDS + 10)
         code_text, seconds_text = result.stdout.split()
-        return int(code_text), int(round(float(seconds_text) * 1000))
+        ms = int(round(float(seconds_text) * 1000))
+        # A non-zero curl exit (timeout, too many redirects, TLS error) means
+        # no complete final response, even if a status code was printed.
+        return (int(code_text) if result.returncode == 0 else 0), ms
     except (subprocess.TimeoutExpired, ValueError):
         return 0, CURL_TIMEOUT_SECONDS * 1000
 
@@ -217,7 +220,6 @@ PAGE = """<!doctype html>
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta http-equiv="refresh" content="300">
 <title>PSCX Status</title>
 <style>
 :root {
@@ -278,10 +280,12 @@ def render_page(summaries, now):
     states = [s["up"] for s in summaries]
     if not states or all(state is None for state in states):
         banner, banner_class = "Waiting for the first check", "none"
-    elif all(states):
+    elif any(state is False for state in states):
+        banner, banner_class = "Some systems are down", "down"
+    elif all(state is True for state in states):
         banner, banner_class = "All systems operational", "ok"
     else:
-        banner, banner_class = "Some systems are down", "down"
+        banner, banner_class = "Some systems have no data yet", "none"
     generated = format_time(now)
     return PAGE % {
         "banner": banner,
