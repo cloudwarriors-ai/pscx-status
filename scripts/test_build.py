@@ -119,5 +119,18 @@ class EscapingTests(unittest.TestCase):
         self.assertEqual(build.slugify("../../etc"), "etc")
 
 
+
+class CspTest(unittest.TestCase):
+    def test_policy_pins_the_inline_style_and_loads_nothing_else(self):
+        import base64, hashlib
+        page = build.with_csp(build.render_page([], build.datetime(2026, 11, 20, tzinfo=build.timezone.utc)))
+        self.assertNotIn("__CSP__", page)
+        style = page.split("<style>", 1)[1].split("</style>", 1)[0]
+        digest = base64.b64encode(hashlib.sha256(style.encode()).digest()).decode()
+        self.assertIn("style-src 'sha256-%s'" % digest, page)
+        self.assertIn("default-src 'none'", page)
+        self.assertNotIn("unsafe-inline", page)
+        self.assertNotIn("<script", page)
+
 if __name__ == "__main__":
     unittest.main()

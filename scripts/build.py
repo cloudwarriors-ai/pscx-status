@@ -9,7 +9,9 @@ Standard library only. Paths are relative to the repository root.
 """
 
 import argparse
+import base64
 import csv
+import hashlib
 import html
 import json
 import os
@@ -220,6 +222,8 @@ PAGE = """<!doctype html>
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="__CSP__">
+<meta name="referrer" content="no-referrer">
 <title>PSCX Status</title>
 <style>
 :root {
@@ -274,6 +278,16 @@ footer a { color: inherit; }
 </body>
 </html>
 """
+
+
+def with_csp(page):
+    """Fill in the page's Content-Security-Policy: nothing may load except the page's own inline
+    style, pinned by its hash (GitHub Pages cannot send headers, so it is a meta tag)."""
+    style = page.split("<style>", 1)[1].split("</style>", 1)[0]
+    digest = base64.b64encode(hashlib.sha256(style.encode("utf-8")).digest()).decode()
+    policy = ("default-src 'none'; style-src 'sha256-%s'; img-src 'self' data:; base-uri 'none'; "
+              "form-action 'none'; upgrade-insecure-requests" % digest)
+    return page.replace("__CSP__", policy, 1)
 
 
 def render_page(summaries, now):
@@ -331,7 +345,7 @@ def main():
         summaries.append(summarize(site, rows, now))
 
     with open(os.path.join(DOCS_DIR, "index.html"), "w", encoding="utf-8") as handle:
-        handle.write(render_page(summaries, now))
+        handle.write(with_csp(render_page(summaries, now)))
     with open(os.path.join(DOCS_DIR, "status.json"), "w", encoding="utf-8") as handle:
         handle.write(status_json(summaries, now))
 
